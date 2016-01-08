@@ -1,9 +1,9 @@
-import html.HTMLStringTag;
-import html.HTMLTag;
-import html.ParameterTag;
+package design.patterns.visitor;
+
+import design.patterns.visitor.html.HTMLStringTag;
+import design.patterns.visitor.html.HTMLTag;
+import design.patterns.visitor.html.ParameterTag;
 import org.junit.Test;
-import visitor.ParameterVisitor;
-import visitor.Visitor;
 
 import java.util.List;
 

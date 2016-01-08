@@ -1,8 +1,9 @@
-package visitor;
+package design.patterns.visitor;
 
-import html.HTMLStringTag;
-import html.HTMLTag;
-import html.ParameterTag;
+
+import design.patterns.visitor.html.HTMLStringTag;
+import design.patterns.visitor.html.HTMLTag;
+import design.patterns.visitor.html.ParameterTag;
 
 public class ParameterVisitor implements Visitor{
 

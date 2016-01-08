@@ -1,5 +1,6 @@
-package html;
-import visitor.Visitor;
+package design.patterns.visitor.html;
+
+import design.patterns.visitor.Visitor;
 
 public class HTMLTag {
     public void accept(Visitor visitor){
