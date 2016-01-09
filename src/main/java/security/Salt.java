@@ -1,12 +1,13 @@
 package security;
 
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
 public class Salt {
-    public void run() throws NoSuchAlgorithmException {
+    public void run() throws NoSuchAlgorithmException, UnsupportedEncodingException {
         // 读入账号口令
         String name = "lbwleon.info";
         String passwd = "lbwleon.info";
