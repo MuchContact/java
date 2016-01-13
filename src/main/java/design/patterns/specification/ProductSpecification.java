@@ -1,9 +1,9 @@
 package design.patterns.specification;
 
-public interface ProductSpecification {
-    boolean isSatisfiedBy(Product product);
+public abstract class ProductSpecification {
+    public abstract boolean isSatisfiedBy(Product product);
 
-    default ProductSpecification belowPrice(double price) {
+    public static ProductSpecification belowPrice(double price) {
         return new ProductSpecification() {
             @Override
             public boolean isSatisfiedBy(Product product) {
@@ -12,11 +12,11 @@ public interface ProductSpecification {
         };
     }
 
-    default ProductSpecification and(ProductSpecification productSpecification) {
+    public ProductSpecification and(ProductSpecification productSpecification) {
         return new AndProductSpecification(this, productSpecification);
     }
 
-    default ProductSpecification not(ProductSpecification productSpecification) {
+    public static ProductSpecification not(ProductSpecification productSpecification) {
         return new ProductSpecification() {
             @Override
             public boolean isSatisfiedBy(Product product) {
@@ -25,7 +25,7 @@ public interface ProductSpecification {
         };
     }
 
-    default ProductSpecification byColor(String color) {
+    public static ProductSpecification byColor(String color) {
         return new ProductSpecification() {
             @Override
             public boolean isSatisfiedBy(Product product) {
