@@ -4,21 +4,27 @@ import java.util.List;
 
 public class ProductFinder {
     private ProductRepository repository;
+    private ProductSpecification spec;
+
+    public ProductFinder() {
+        spec = new ProductSpecification() {
+            @Override
+            public boolean isSatisfiedBy(Product product) {
+                return false;
+            }
+        };
+    }
 
     public List<Product> belowPrice(double price){
-        ProductBelowPriceSpecification filter = new ProductBelowPriceSpecification(price);
+        ProductSpecification filter = spec.belowPrice(20d);
         return repository.selectBy(filter);
     }
 
     public List<Product> belowPriceAndNotSpecificColor(double price, String color){
-        ProductBelowPriceSpecification belowFilter = new ProductBelowPriceSpecification(price);
-        ProductColorSpecification colorFilter = new ProductColorSpecification(color);
-        AndProductSpecification and = new AndProductSpecification(belowFilter, colorFilter);
+        ProductSpecification below = spec.belowPrice(30);
+        ProductSpecification not = spec.not(spec.byColor(color));
+        ProductSpecification and = below.and(not);
         return repository.selectBy(and);
     }
-//    ProductSpecification and(ProductSpecification productSpecification){
-//        return new AndProductSpecification()
-//    }
-//    ProductSpecification not(ProductSpecification productSpecification);
-//    ProductSpecification byColor(ProductSpecification productSpecification);
+
 }
