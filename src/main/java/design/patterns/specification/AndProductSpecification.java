@@ -1,6 +1,6 @@
 package design.patterns.specification;
 
-public class AndProductSpecification implements ProductSpecification{
+public class AndProductSpecification extends ProductSpecification{
     private ProductSpecification spec1;
     private ProductSpecification spec2;
 
