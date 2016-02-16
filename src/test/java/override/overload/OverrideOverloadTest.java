@@ -9,6 +9,9 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+/**
+ * Selection among overloaded methods is static, while selection among overridden methods is dynamic
+ */
 public class OverrideOverloadTest {
     @Test
     public void testOverload() throws Exception {
