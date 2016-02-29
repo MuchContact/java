@@ -40,8 +40,8 @@ public class Period implements Serializable {
     private void readObject(ObjectInputStream s)
             throws IOException, ClassNotFoundException {
         s.defaultReadObject();
-        this.start = (Date) s.readObject();
-        this.end = (Date) s.readObject();
+        start = (Date) s.readObject();
+        end = (Date) s.readObject();
         // Check that our invariants are satisfied
         if (start.compareTo(end) > 0)
             throw new InvalidObjectException(start + " after " + end);
@@ -49,8 +49,8 @@ public class Period implements Serializable {
 
     private synchronized void writeObject(java.io.ObjectOutputStream s) throws IOException {
         s.defaultWriteObject();
-        s.writeObject(this.start);
-        s.writeObject(this.end);
+        s.writeObject(start);
+        s.writeObject(end);
         if (start.compareTo(end) > 0)
             throw new InvalidObjectException(start + " after " + end);
     }
