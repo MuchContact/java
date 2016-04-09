@@ -18,6 +18,7 @@ public class FinderTest {
         if (matcher.find()) {
             id = matcher.group(1);
         }
+
         assertThat(id, is("eyu-12u-eb"));
 
     }
