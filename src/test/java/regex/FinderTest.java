@@ -9,10 +9,10 @@ public class FinderTest {
     @Test
     public void should_get_id() throws Exception {
         final Finder finder = new Finder();
-        String first = finder.findFirst("customers/([a-z0-9-]*)", "http://localhost/customers/eyu-12u-eb");
+        String first = finder.findFirst("customers/([^/]*)", "http://localhost/customers/eyu-12u-eb");
         assertThat(first, is("eyu-12u-eb"));
 
-        first = finder.findFirst("customers/([a-z0-9-]*)", "http://localhost/customers/eyu-12u-eb/");
+        first = finder.findFirst("customers/([^/]*)", "http://localhost/customers/eyu-12u-eb/");
         assertThat(first, is("eyu-12u-eb"));
     }
 }
