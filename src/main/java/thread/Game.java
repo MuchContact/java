@@ -52,7 +52,7 @@ public class Game implements IGame {
         this.players.add(player);
     }
 
-    public static class Player implements Runnable {
+    public static class Player implements Runnable, IPlayer {
         private final String name;
         private Game currentGame;
 
@@ -80,6 +80,7 @@ public class Game implements IGame {
 
         }
 
+        @Override
         public void joinGame(Game game) {
             this.currentGame = game;
         }
