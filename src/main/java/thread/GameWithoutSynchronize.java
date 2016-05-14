@@ -1,13 +1,14 @@
 package thread;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Game implements IGame {
+public class GameWithoutSynchronize implements IGame{
     private List<IPlayer> players;
     private boolean started;
 
     public static void main(String[] args) {
-        IGame game = new Game();
+        IGame game = new GameWithoutSynchronize();
         for (int i = 1; i <= 20; i++) {
             game.addPlayer(new Player(String.format("players-%d", i)));
         }
@@ -15,19 +16,9 @@ public class Game implements IGame {
         game.go();
     }
 
-    private synchronized void prepare(Player player) throws InterruptedException {
-        synchronized (this) {
-            while (!started) {
-                wait();
-            }
-            System.out.println(String.format("%s start to run", player.name));
-        }
-    }
-
     @Override
-    public synchronized void go() {
+    public void go() {
         started = true;
-        notifyAll();
     }
 
     @Override
@@ -61,13 +52,10 @@ public class Game implements IGame {
         }
 
         private void waitToStart() throws InterruptedException {
-            synchronized (currentGame) {
-                if (!currentGame.started()) {
-                        currentGame.wait();
+                while(!currentGame.started()) {
+                    Thread.sleep(100);
                 }
                 System.out.println(String.format("%s start to run", this.name));
-
-            }
         }
 
         @Override
@@ -85,5 +73,4 @@ public class Game implements IGame {
             this.currentGame = game;
         }
     }
-
 }

@@ -1,7 +1,7 @@
 package thread;
 
-public interface IGame {
-    void addPlayer(Game.Player player);
+interface IGame {
+    void addPlayer(IPlayer player);
     void ready();
     void go();
     boolean started();
