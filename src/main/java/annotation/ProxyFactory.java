@@ -3,31 +3,31 @@ package annotation;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.InvocationHandler;
 
-import java.lang.reflect.Method;
-
 class ProxyFactory {
     public static <T> T proxy(Class<T> proxyTargetClass) {
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(proxyTargetClass);
+        enhancer.setCallback(generateInvocationHandler(proxyTargetClass));
+        T proxy = (T) enhancer.create();
+        return proxy;
+    }
 
-        T t = newInstance(proxyTargetClass);
-        InvocationHandler handler = (proxy, method, args) -> {
+    private static <T> InvocationHandler generateInvocationHandler(Class<T> proxyTargetClass) {
+        T originInstance = newInstance(proxyTargetClass);
+        return (proxy, method, args) -> {
             MonitorAnnotation annotation = method.getAnnotation(MonitorAnnotation.class);
             Object result;
             if(annotation != null){
-                Class monitor = annotation.monitor();
-                IMonitor o = (IMonitor) newInstance(monitor);
-                o.before();
-                result = method.invoke(t, args);
-                o.after();
+                Class monitorClazz = annotation.monitor();
+                IMonitor monitor = (IMonitor) newInstance(monitorClazz);
+                monitor.before();
+                result = method.invoke(originInstance, args);
+                monitor.after();
             }else {
-                result = method.invoke(t, args);
+                result = method.invoke(originInstance, args);
             }
             return result;
         };
-        enhancer.setCallback(handler);
-        T proxy = (T) enhancer.create();
-        return proxy;
     }
 
     private static <T> T newInstance(Class<T> clazz) throws IllegalArgumentException{
