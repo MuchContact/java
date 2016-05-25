@@ -16,6 +16,7 @@ import static org.mockito.Mockito.verify;
 public class CAnnotationTest {
 
     private ByteArrayOutputStream output = new ByteArrayOutputStream();
+    final static PrintStream origin = System.out;
 
     @Before
     public void before() throws Exception {
@@ -24,17 +25,19 @@ public class CAnnotationTest {
 
     @After
     public void after() throws Exception {
-        System.setOut(null);
+        System.setOut(origin);
     }
 
     @Test
-    public void should_invoke_before_method() throws Exception {
+    public void should_invoke_before_and_after_methods() throws Exception {
 //        IMonitor monitorOne = mock(MonitorOne.class);
         ProxyTarget target = ProxyFactory.proxy(ProxyTarget.class);
         target.doSomething();
         String result = output.toString();
         assertThat(result.contains("MonitorOne report: start to do something"), is(true));
         assertThat(result.contains("MonitorOne report: done for doing something"), is(true));
+        System.setOut(origin);
+        System.out.println(output.toString());
 //        verify(monitorOne, times(1)).before();
     }
 
