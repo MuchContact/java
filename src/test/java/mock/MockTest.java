@@ -22,7 +22,11 @@ public class MockTest {
             two();
         }
 
-        public void two() {
+        public final void two() {
+            three();
+        }
+
+        public void three() {
 
         }
     }
@@ -32,5 +36,12 @@ public class MockTest {
         target.one();
         verify(target, times(1)).one();
         verify(target, times(0)).two();
+    }
+
+    @Test
+    public void should_invoke_method_three_because_method_two_is_final() throws Exception {
+        target.two();
+        verify(target, times(1)).two();
+        verify(target, times(1)).three();
     }
 }
