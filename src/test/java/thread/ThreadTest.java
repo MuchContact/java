@@ -26,6 +26,7 @@ public class ThreadTest {
         Thread thread = new Thread(target);
         thread.start();
         TimeUnit.SECONDS.sleep(2);
+        //notify must happen after thread running
         target.notifyToStart();
         thread.join();
         assertThat(target.started, is(true));

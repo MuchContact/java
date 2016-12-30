@@ -10,7 +10,7 @@ import static org.junit.Assert.assertThat;
 
 public class PrivateMethodInvokeTest {
     @Test
-    public void testInvokePrivateMethodUsingRefection() throws Exception {
+    public void test_to_invoke_private_method_using_refection() throws Exception {
         PrivateMethodInvoke privateMethodInvoke = new PrivateMethodInvoke("one");
         Method innerMethod = privateMethodInvoke.getClass().getDeclaredMethod("innerMethod", null);
         innerMethod.setAccessible(true);

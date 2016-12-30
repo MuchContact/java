@@ -14,67 +14,62 @@ import static org.mockito.Mockito.when;
 
 public class ProxyTest {
     @Test
-    public void should_proxy_subject_interface() throws Exception {
-        Subject real = mock(Subject.class);
+    public void should_proxy_customer_interface() throws Exception {
+        MyInterface real = mock(MyInterface.class);
         when(real.getName()).thenReturn("MockObject");
         DynamicProxyHandler proxyHandler = new DynamicProxyHandler(real);
-        Subject proxy =
-                (Subject) Proxy.newProxyInstance(
-                        Subject.class.getClassLoader(),
-                        new Class[]{Subject.class},
+        MyInterface proxy =
+                (MyInterface) Proxy.newProxyInstance(
+                        MyInterface.class.getClassLoader(),
+                        new Class[]{MyInterface.class},
                         proxyHandler);
-        Decorator mockDecorator = mock(Decorator.class);
-        proxyHandler.setDecorator(mockDecorator);
+        Monitor mockMonitor = mock(Monitor.class);
+        proxyHandler.setMonitor(mockMonitor);
         String name = proxy.getName();
         assertThat(name, is("MockObject"));
-        verify(mockDecorator).doSomething();
+        verify(mockMonitor).doSomething();
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_not_able_to_proxy_subject_class() throws Exception {
-        SubjectClass real = new SubjectClass();
+    public void should_not_able_to_proxy_customer_class() throws Exception {
+        MyClass real = new MyClass();
         DynamicProxyHandler proxyHandler = new DynamicProxyHandler(real);
-        Subject proxy =
-                (Subject) Proxy.newProxyInstance(
-                        SubjectClass.class.getClassLoader(),
-                        new Class[]{SubjectClass.class},
+        Proxy.newProxyInstance(
+                        MyClass.class.getClassLoader(),
+                        new Class[]{MyClass.class},
                         proxyHandler);
-        Decorator mockDecorator = mock(Decorator.class);
-        proxyHandler.setDecorator(mockDecorator);
-        proxy.getName();
-        verify(mockDecorator).doSomething();
     }
 
-    private interface Subject {
+    private interface MyInterface {
         String getName();
     }
 
     private static class DynamicProxyHandler implements InvocationHandler {
-        private final Subject target;
-        private Decorator decorator;
+        private final MyInterface target;
+        private Monitor monitor;
 
-        public DynamicProxyHandler(Subject real) {
+        public DynamicProxyHandler(MyInterface real) {
             this.target = real;
         }
 
-        public void setDecorator(Decorator decorator) {
-            this.decorator = decorator;
+        public void setMonitor(Monitor monitor) {
+            this.monitor = monitor;
         }
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            decorator.doSomething();
+            monitor.doSomething();
             return method.invoke(target, args);
         }
     }
 
-    private static class Decorator {
+    private static class Monitor {
         public void doSomething() {
 
         }
     }
 
-    private static class SubjectClass implements Subject {
+    private static class MyClass implements MyInterface {
         @Override
         public String getName() {
             return null;
