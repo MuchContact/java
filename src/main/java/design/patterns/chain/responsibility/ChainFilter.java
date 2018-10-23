@@ -4,6 +4,7 @@ package design.patterns.chain.responsibility;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author muco
@@ -13,7 +14,7 @@ public class ChainFilter {
         testWheelTimer();
     }
 
-    private static void testWheelTimer() {
+    private static void testWheelTimer() throws InterruptedException {
         Filter0 filter0 = new Filter0();
         Filter0 filter01 = new Filter0();
         Filter0 filter001 = new Filter0();
@@ -21,27 +22,47 @@ public class ChainFilter {
         container.addFilter(filter0);
         container.addFilter(filter01);
         container.addFilter(filter001);
-        container.doExe(null, null);
+        new Thread(() -> {
+            try {
+                container.doExe(null, null);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+        new Thread(() -> {
+            try {
+                container.doExe(null, null);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
 
     private static class Filter0 {
-        public void doExe(Object req, Object resp, FilterChain0 chain) {
-            System.out.println(String.format("before %s", this));
+        public void doExe(Object req, Object resp, FilterChain0 chain) throws InterruptedException {
+            System.out.println(String.format("[%s]before %s", Thread.currentThread().getName(), this));
+            TimeUnit.SECONDS.sleep(1);
             chain.doExe(req, resp);
-            System.out.println(String.format("after %s", this));
+            System.out.println(String.format("[%s]after %s", Thread.currentThread().getName(), this));
         }
     }
 
     private static class FilterChain0 {
         private int cur = 0;
         private List<Filter0> filters = new ArrayList<>();
+        private volatile boolean done = false;
 
-        public void doExe(Object req, Object resp) {
+        public synchronized void doExe(Object req, Object resp) throws InterruptedException {
             Filter0 filter0 = getFilter0();
             cur++;
             if (filter0 == null) {
-                System.out.println("do post");
+                if (!done) {
+                    System.out.println("do post");
+                    done = true;
+                }else{
+                    System.out.println("nonsense");
+                }
                 return;
             }
             filter0.doExe(req, resp, this);
