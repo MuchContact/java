@@ -18,4 +18,5 @@ dependencies {
     compile('org.apache.jclouds:jclouds-compute:1.8.1') {
         exclude group: 'javax.ws.rs'
     }
+    compile group: 'io.netty', name: 'netty-all', version: '5.0.0.Alpha2'
 }
