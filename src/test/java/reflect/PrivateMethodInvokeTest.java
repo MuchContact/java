@@ -28,4 +28,13 @@ public class PrivateMethodInvokeTest {
         assertThat(one.getName(), is("two"));
 
     }
+
+    @Test
+    public void should_set_static_field() throws Exception {
+        PrivateMethodInvoke one = new PrivateMethodInvoke("StaticTest");
+        Field staticField = PrivateMethodInvoke.class.getDeclaredField("staticField");
+        staticField.setAccessible(true);
+        staticField.set(one, "bingo");
+        assertThat(one.getStaticField(), is("bingo"));
+    }
 }
