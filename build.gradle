@@ -19,4 +19,6 @@ dependencies {
         exclude group: 'javax.ws.rs'
     }
     compile group: 'io.netty', name: 'netty-all', version: '5.0.0.Alpha2'
+    compileOnly 'org.projectlombok:lombok:1.18.10'
+    annotationProcessor 'org.projectlombok:lombok:1.18.10'
 }
